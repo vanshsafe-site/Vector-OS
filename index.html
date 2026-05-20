@@ -275,6 +275,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);color:#fff;}
     width 0.3s ease,
     height 0.3s ease,
     transform 0.2s ease;
+    z-index:2147483647!important;
 }
 
 #dock::before{
@@ -1691,7 +1692,7 @@ function openApp(id){
   const win = document.getElementById('win-'+id);
   if(!win) { notify('Coming Soon', id+' launching soon'); return; }
   win.classList.add('open');
-  win.style.zIndex = ++activeZ;
+  win.style.zIndex = Math.min(++activeZ, 999999);
   openApps[id] = true;
   const dockEl = document.getElementById('dock-'+id);
   if(dockEl) dockEl.classList.add('running');
@@ -1737,7 +1738,7 @@ function maximizeApp(id){
 
 // Window focus on click
 document.querySelectorAll('.app-window').forEach(win => {
-  win.addEventListener('mousedown', () => { win.style.zIndex = ++activeZ; });
+  win.addEventListener('mousedown', () => { win.style.zIndex = Math.min(++activeZ, 999999); });
 });
 
 // Window dragging
