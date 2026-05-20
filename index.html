@@ -127,7 +127,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);color:#fff;}
   backdrop-filter:blur(20px) saturate(150%);
   border-bottom:1px solid rgba(255,255,255,0.06);
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 16px;z-index:9999;
+  padding:0 16px;z-index:1000;
   font-size:13px;
 }
 .topbar-left{display:flex;align-items:center;gap:14px;font-weight:600;opacity:0.9;}
@@ -970,10 +970,13 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);color:#fff;}
   .widget{min-width:180px;}
   .widget-weather{max-width:220px;}
   .app-window{
-    width:100vw!important;height:calc(100vh - var(--dock-h) - var(--topbar-h) - 10px)!important;
-    border-radius:24px 24px 0 0;
-    bottom:calc(var(--dock-h) + 4px)!important;
-    top:auto!important;left:0!important;right:0!important;
+    width:100vw!important;
+    height:calc(100vh - var(--dock-h) - var(--topbar-h) - 14px)!important;
+    border-radius:20px 20px 16px 16px;
+    top:calc(var(--topbar-h) + 4px)!important;
+    bottom:auto!important;
+    left:0!important;
+    right:0!important;
   }
   #startMenu{
     width:100vw;border-radius:var(--radius-lg) var(--radius-lg) 0 0;
