@@ -338,7 +338,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);color:#fff;}
 .dock-item .dock-dot{
   position:absolute;
 
-  bottom:-6px;
+  bottom:-5px;
   left:50%;
 
   transform:translateX(-50%);
@@ -354,7 +354,11 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);color:#fff;}
 
   transition:opacity 0.2s ease;
 }
-
+@media(max-width:600px){
+  .dock-item .dock-dot{
+    bottom:-0px;
+  }
+}
 .dock-item.running .dock-dot{
   opacity:0.8;
 }
@@ -623,8 +627,9 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);color:#fff;}
   background:linear-gradient(135deg,#5b9cf6,#a78bfa,#34d399);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   margin-bottom:8px;
+  text-align:center;width:100%;display:block;
 }
-.vector-search-tagline{font-size:13px;opacity:0.35;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;}
+.vector-search-tagline{font-size:13px;opacity:0.35;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;text-align:center;width:100%;display:block;}
 .vector-search-bar{
   display:flex;align-items:center;gap:12px;
   background:rgba(255,255,255,0.08);
@@ -637,13 +642,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);color:#fff;}
 .vector-search-bar:focus-within{border-color:rgba(91,156,246,0.5);box-shadow:0 4px 24px rgba(91,156,246,0.2);}
 .vector-search-bar input{flex:1;background:none;border:none;outline:none;color:white;font-size:15px;font-family:var(--font);}
 .vector-search-bar input::placeholder{color:rgba(255,255,255,0.35);}
-.vector-search-submit{
-  background:linear-gradient(135deg,#5b9cf6,#7c6af7);
-  border:none;border-radius:99px;padding:8px 18px;
-  color:white;font-size:13px;font-weight:600;cursor:pointer;
-  font-family:var(--font);transition:all 0.2s;
-}
-.vector-search-submit:hover{transform:scale(1.04);box-shadow:0 4px 14px rgba(91,156,246,0.4);}
+
 .browser-quick-links{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:8px;}
 .browser-quick-link{
   display:flex;flex-direction:column;align-items:center;gap:8px;
@@ -791,12 +790,13 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);color:#fff;}
   width:min(160px,40vw);height:min(160px,40vw);border-radius:24px;
   display:flex;align-items:center;justify-content:center;font-size:64px;
   box-shadow:0 20px 60px rgba(0,0,0,0.6),0 0 0 1px rgba(255,255,255,0.1);
-  animation:albumSpin 8s linear infinite paused;
   position:relative;overflow:hidden;
+  transition:transform 0.4s ease, box-shadow 0.4s ease;
 }
-.music-album.playing{animation-play-state:running;}
-.music-album::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent 50%);}
-@keyframes albumSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.music-album.playing{
+  transform:scale(1.05);
+  box-shadow:0 24px 70px rgba(91,156,246,0.35),0 0 0 1px rgba(255,255,255,0.15);
+}
 .music-track{font-size:18px;font-weight:700;text-align:center;}
 .music-artist{font-size:13px;opacity:0.5;text-align:center;}
 .music-progress{width:100%;max-width:320px;}
@@ -830,6 +830,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);color:#fff;}
 .music-bars-live span{
   width:4px;border-radius:99px;background:linear-gradient(180deg,#5b9cf6,#a78bfa);
   animation:liveBar 0.8s infinite ease-in-out alternate;
+  animation-play-state:paused;
 }
 .music-bars-live span:nth-child(2){animation-delay:.15s}
 .music-bars-live span:nth-child(3){animation-delay:.3s}
@@ -1242,9 +1243,8 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);color:#fff;}
         <div class="vector-search-tagline">Powered by Google Search</div>
       </div>
       <div class="vector-search-bar">
-        <span style="opacity:0.4;font-size:16px;">🔍</span>
         <input type="text" id="homeSearchInput" placeholder="Search the web..." onkeydown="homeSearch(event)" />
-        <button class="vector-search-submit" onclick="doHomeSearch()">Search</button>
+<span style="opacity:0.4;font-size:16px;cursor:pointer;" onclick="doHomeSearch()">🔍</span>
       </div>
       <div class="browser-quick-links">
         <div class="browser-quick-link" onclick="openUrl('https://google.com')">
@@ -1353,7 +1353,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);color:#fff;}
       <div class="music-track" id="musicTrack">Neon Pulse</div>
       <div class="music-artist" id="musicArtist">Synthwave Collective</div>
       <div class="music-progress">
-        <div class="music-progress-bar"><div class="music-progress-fill" id="musicFill"></div></div>
+        <div class="music-progress-bar" id="musicProgressBar" onclick="seekMusic(event)" style="cursor:pointer;"><div class="music-progress-fill" id="musicFill"></div></div>
         <div class="music-times"><span id="musicCur">1:24</span><span id="musicTot">3:52</span></div>
       </div>
       <div class="music-controls">
@@ -1493,17 +1493,7 @@ Features:
         <button class="game-btn primary" onclick="startSnake()">▶ Start</button>
         <button class="game-btn" onclick="pauseSnake()">⏸ Pause</button>
       </div>
-      <div class="game-dpad">
-        <div class="dpad-empty"></div>
-        <div class="dpad-btn" onclick="snakeDir(0,-1)">▲</div>
-        <div class="dpad-empty"></div>
-        <div class="dpad-btn" onclick="snakeDir(-1,0)">◄</div>
-        <div class="dpad-btn" style="font-size:14px;opacity:0.4;">●</div>
-        <div class="dpad-btn" onclick="snakeDir(1,0)">►</div>
-        <div class="dpad-empty"></div>
-        <div class="dpad-btn" onclick="snakeDir(0,1)">▼</div>
-        <div class="dpad-empty"></div>
-      </div>
+    
     </div>
   </div>
 </div>
@@ -1946,7 +1936,8 @@ function togglePlay(){
   document.getElementById('playBtn').textContent = musicPlaying ? '⏸' : '▶';
   document.getElementById('musicAlbum').classList.toggle('playing', musicPlaying);
   const bars = document.getElementById('musicBarsLive');
-  bars.style.opacity = musicPlaying ? '1':'0.3';
+bars.style.opacity = musicPlaying ? '1' : '0.3';
+bars.querySelectorAll('span').forEach(s => s.style.animationPlayState = musicPlaying ? 'running' : 'paused');
   if(musicPlaying){
     musicInterval = setInterval(() => {
       musicProgress = (musicProgress+0.5)%100;
@@ -1966,6 +1957,13 @@ function loadTrack(i){
 }
 function nextTrack(){ trackIdx=(trackIdx+1)%tracks.length; loadTrack(trackIdx); }
 function prevTrack(){ trackIdx=(trackIdx-1+tracks.length)%tracks.length; loadTrack(trackIdx); }
+function seekMusic(e){
+  const bar = document.getElementById('musicProgressBar');
+  const rect = bar.getBoundingClientRect();
+  const pct = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+  musicProgress = pct;
+  document.getElementById('musicFill').style.width = pct + '%';
+}
 
 // ============================
 // PHOTOS
@@ -2017,9 +2015,22 @@ function initSnakeCanvas(){
   canvas.width = size; canvas.height = size;
   snakeCols = Math.floor(size/snakeGrid);
   snakeRows = Math.floor(size/snakeGrid);
+  let touchStartX = 0, touchStartY = 0;
+  canvas.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    e.preventDefault();
+  }, {passive:false});
+  canvas.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if(Math.abs(dx) < 12 && Math.abs(dy) < 12) return;
+    if(Math.abs(dx) > Math.abs(dy)) snakeDir(dx > 0 ? 1 : -1, 0);
+    else snakeDir(0, dy > 0 ? 1 : -1);
+    e.preventDefault();
+  }, {passive:false});
   drawSnakeIdle();
 }
-
 function drawSnakeIdle(){
   if(!snakeCtx) return;
   const canvas = document.getElementById('snakeCanvas');
