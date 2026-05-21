@@ -970,7 +970,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);color:#fff;}
   .widget{min-width:180px;}
   .widget-weather{max-width:220px;}
   .app-window{
-    width:100vw!important;height:calc(100vh - var(--dock-h) - var(--topbar-h) - 10px)!important;
+    width:100vw!important;height:calc(100dvh - var(--dock-h) - var(--topbar-h) - 10px)!important;
     border-radius:24px 24px 0 0;
     bottom:calc(var(--dock-h) + 4px)!important;
     top:auto!important;left:0!important;right:0!important;
@@ -1723,8 +1723,14 @@ function maximizeApp(id){
     win._maximized = false;
   } else {
     win._prevStyle = win.style.cssText;
-    const tb = 32; const dk = 72;
-    win.style.cssText += `;width:calc(100vw - 12px)!important;height:calc(100vh - ${tb+dk+24}px)!important;top:${tb+6}px!important;left:6px!important;border-radius:20px!important;`;
+    const isMobile = window.innerWidth <= 600;
+    const tb = isMobile ? 28 : 32;
+    const dk = isMobile ? 64 : 72;
+    if(isMobile){
+      win.style.cssText += `;width:100vw!important;height:calc(100dvh - ${tb + dk + 14}px)!important;top:${tb + 4}px!important;left:0!important;border-radius:20px 20px 0 0!important;bottom:auto!important;`;
+    } else {
+      win.style.cssText += `;width:calc(100vw - 12px)!important;height:calc(100dvh - ${tb + dk + 24}px)!important;top:${tb + 6}px!important;left:6px!important;border-radius:20px!important;`;
+    }
     win._maximized = true;
   }
 }
